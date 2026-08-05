@@ -15,7 +15,7 @@ def train_step(model: torch.nn,
                loss_fn : torch.nn.Module, 
                optimizer : torch.optim.Optimizer, 
                accuracy_fn,
-               device : torch.device = device):
+               device : torch.device):
 
     """Trains the model on the dataloader"""
     train_loss, train_accuracy = 0,0
@@ -52,7 +52,7 @@ def validation_step(model: torch.nn,
                     data_loader: torch.utils.data.DataLoader, 
                     loss_fn : torch.nn.Module, 
                     accuracy_fn, 
-                    device : torch.device = device):
+                    device : torch.device ):
     
     val_loss, val_accuracy = 0,0
     model.eval()
@@ -73,6 +73,13 @@ def validation_step(model: torch.nn,
     val_accuracy /= len(data_loader)
 
     print(f"Validation Loss: {val_loss}, Validation Accuracy: {val_accuracy}")
+
+
+def print_time(start:float, end:float, device: torch.device = None):
+    """Prints the time of the model"""
+    time = end =start
+    print(f"Train time on {device}: {time:.3f} seconds")
+    return time
 
 
 
