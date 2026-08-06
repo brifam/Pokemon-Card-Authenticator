@@ -25,10 +25,10 @@ def train_step(model: torch.nn,
 
         X,y = X.to(device), y.to(device)
         
-        y_logits = model(X)
+        y_logits = model(X).squeeze(1)
         y_pred = torch.round(torch.sigmoid(y_logits))
 
-        loss = loss_fn(y_logits,y)
+        loss = loss_fn(y_logits,y.float())
         train_loss += loss.item()
 
         accuracy = accuracy_fn(y,y_pred)
@@ -45,7 +45,7 @@ def train_step(model: torch.nn,
     train_loss /= len(data_loader)
     train_accuracy /= len(data_loader)
 
-    print(f"Train Loss: {train_loss}, Train Accuracy: {train_accuracy}")
+    print(f"Train Loss: {train_loss:.2f}, Train Accuracy: {train_accuracy:.2f}")
 
 
 def validation_step(model: torch.nn, 
@@ -59,10 +59,10 @@ def validation_step(model: torch.nn,
     with torch.inference_mode():
         for (X,y) in data_loader:
             X,y = X.to(device), y.to(device)
-            y_val_logits = model(X)
+            y_val_logits = model(X).squeeze(1)
             y_val_pred = torch.round(torch.sigmoid(y_val_logits))
 
-            loss = loss_fn(y_val_logits,y)
+            loss = loss_fn(y_val_logits,y.float())
             val_loss+= loss.item()
 
             accuracy = accuracy_fn(y,y_val_pred)
@@ -72,12 +72,12 @@ def validation_step(model: torch.nn,
     val_loss /= len(data_loader)
     val_accuracy /= len(data_loader)
 
-    print(f"Validation Loss: {val_loss}, Validation Accuracy: {val_accuracy}")
+    print(f"Validation Loss: {val_loss:.2f}, Validation Accuracy: {val_accuracy:.2f}")
 
 
 def print_time(start:float, end:float, device: torch.device = None):
     """Prints the time of the model"""
-    time = end =start
+    time = end -start
     print(f"Train time on {device}: {time:.3f} seconds")
     return time
 
