@@ -11,12 +11,14 @@ from torch.utils.data import random_split, DataLoader
 
 BATCH_SIZE = 32
 
+g = torch.Generator()
+g.manual_seed(42)
 
 card_transform = transforms.Compose([transforms.Resize((224,224)),
                                     transforms.ToTensor()])
 
 
-train_dataset = datasets.ImageFolder(root = "../dataset/train", transform= card_transform)
+train_dataset = datasets.ImageFolder(root = "dataset/train", transform= card_transform)
 
 train_size = int(len(train_dataset) * .8)
 validation_size = len(train_dataset) - train_size
@@ -24,7 +26,7 @@ validation_size = len(train_dataset) - train_size
 
 train_set, validation_set = random_split(train_dataset,[train_size,validation_size])
 
-train_dataloader = DataLoader(dataset = train_set, batch_size= BATCH_SIZE, shuffle= True)
+train_dataloader = DataLoader(dataset = train_set, batch_size= BATCH_SIZE, shuffle= True, generator= g)
 validation_dataloader = DataLoader(dataset = validation_set, batch_size = BATCH_SIZE, shuffle = False)
 
 

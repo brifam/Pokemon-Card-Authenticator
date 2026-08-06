@@ -1,4 +1,17 @@
+
+
 import torch
+import random
+import numpy as np
+
+#Setting up manual seed
+SEED = 42
+random.seed(SEED)
+np.random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
+
 import torch.nn as nn
 from src.dataset import train_dataloader, validation_dataloader
 from src.model import PokemonCardModelV1
@@ -7,8 +20,7 @@ from tqdm.auto import tqdm
 
 
 
-torch.manual_seed(42)
-torch.cuda.manual_seed(42)
+
 #Device agnostic code 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -57,3 +69,17 @@ train_end_timer = timer()
 
 total_train_time = print_time(start = train_start_timer, end= train_end_timer, device= device)
 
+#Saving first model
+# from pathlib import Path
+
+# Model_Path = Path("models")
+
+# Model_Path.mkdir(parents= True, exist_ok= True)
+
+# Model_Name = "pokemone_card_model_v1.pth"
+
+# Model_Save_Path = Model_Path / Model_Name
+
+# print(f"Saving model to {Model_Save_Path}")
+
+# torch.save(obj=model_0.state_dict(), f = Model_Save_Path)
