@@ -31,11 +31,9 @@ class PokemonCardModelV1(nn.Module):
 
     def forward(self,x):
         x = self.conv_block1(x)
-        print(x.shape)
         x = self.conv_block2(x)
-        print(x.shape)
         x = self.classifier(x)
-        print(x.shape)
+
 
         return x
 
