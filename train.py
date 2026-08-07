@@ -76,7 +76,7 @@ total_train_time = print_time(start = train_start_timer, end= train_end_timer, d
 
 # Model_Path.mkdir(parents= True, exist_ok= True)
 
-# Model_Name = "pokemone_card_model_v1.pth"
+# Model_Name = "pokemon_card_model_v1.pth"
 
 # Model_Save_Path = Model_Path / Model_Name
 
