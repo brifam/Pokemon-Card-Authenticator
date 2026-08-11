@@ -1,6 +1,5 @@
 import torch
 
-
 def accuracy_fn(y_true,y_pred):
 
     """Calculates Model's Accuracy"""
