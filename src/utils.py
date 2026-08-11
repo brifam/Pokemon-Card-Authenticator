@@ -74,6 +74,26 @@ def validation_step(model: torch.nn,
     print(f"Validation Loss: {val_loss:.2f}, Validation Accuracy: {val_accuracy:.2f}")
 
 
+def make_predictions(model:torch.nn.Module, data: list, device = torch.device):
+    pred_probs = []
+    model.to(device)
+    model.eval()
+
+    with torch.inference_mode():
+        for sample in data:
+             sample = torch.unsqueeze(sample,dim=0).to(device)
+
+             pred_logit = model(sample)
+             pred_prob = torch.sigmoid(pred_logit)
+             pred_probs.append(pred_prob.cpu())
+
+    return torch.stack(pred_probs)
+
+
+             
+
+
+
 def print_time(start:float, end:float, device: torch.device = None):
     """Prints the time of the model"""
     time = end -start
