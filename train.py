@@ -34,8 +34,8 @@ output_shape = 1
 model_0 = PokemonCardModelV1(input_shape =input_shape, hidden_units = hidden_units,output_shape= output_shape).to(device)
 
 #Setting up loss function and optimizer
-
-loss_fn = nn.BCEWithLogitsLoss()
+pos_weight = torch.tensor([250/123]).to(device) 
+loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)  
 
 #optimizer = torch.optim.SGD(model_0.parameters(), lr = .001)- with lr .01: highest val acc 93.75%  but kept randomly spiking down and up | with lr .001: kepting getting stuck in the 50-60s
 optimizer = torch.optim.Adam(params = model_0.parameters(), lr = .001)
@@ -70,16 +70,16 @@ train_end_timer = timer()
 total_train_time = print_time(start = train_start_timer, end= train_end_timer, device= device)
 
 #Saving first model
-# from pathlib import Path
+from pathlib import Path
 
-# Model_Path = Path("models")
+Model_Path = Path("models")
 
-# Model_Path.mkdir(parents= True, exist_ok= True)
+Model_Path.mkdir(parents= True, exist_ok= True)
 
-# Model_Name = "pokemon_card_model_v1.pth"
+Model_Name = "pokemon_card_model_v1.pth"
 
-# Model_Save_Path = Model_Path / Model_Name
+Model_Save_Path = Model_Path / Model_Name
 
-# print(f"Saving model to {Model_Save_Path}")
+print(f"Saving model to {Model_Save_Path}")
 
-# torch.save(obj=model_0.state_dict(), f = Model_Save_Path)
+torch.save(obj=model_0.state_dict(), f = Model_Save_Path)

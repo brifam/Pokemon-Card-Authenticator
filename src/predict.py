@@ -44,3 +44,6 @@ cropped_pred_class, cropped_confidence =image_predictor("demo_images/cropped_tes
 
 print(f"Uncropped Results: {uncropped_pred_class} | {uncropped_confidence*100:.2f}% Confidence")
 print(f"Cropped Results: {cropped_pred_class} | {cropped_confidence*100:.2f}% Confidence")
+
+
+#Predicted the genuine Pokemon card cropped well, however the uncropped says its false. Best to crop the image(Framed)

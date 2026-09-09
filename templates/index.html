@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéCheck AI</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kaisei+Opti&family=Libre+Baskerville:ital,wght@0,400..700;1,400..700&family=Valley+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href = "#title" class = "skip"> Skip to main content</a> 
+        <div>
+            <a href = "/">PokéCheck AI</a>
+        </div>
+
+
+        <button id = "nav-toggle" aria-label = "Toggle navigation" aria-expanded="false">☰</button>
+
+        <nav id = "main-nav">
+            <a href = "#title">Home</a>
+            <a href = "#examples">Examples & Tips</a>
+            <a href = "#about">The Mission</a>
+            <a href = "#key-findings">Key Findings</a>
+        </nav>
+
+    </header>
+   
+
+    <main>
+        <section id = "title">
+            <h1>Welcome to PokéCheck AI</h1>
+            <p>Check your Pokémon cards for authenticity.</p>
+        </section>
+        
+        <section>
+            <form id = "upload-form" action = "/predict" method = "POST" enctype = "multipart/form-data">
+                <input type = "file" id = "card-file-input" name = "file" accept = "image/png, image/jpeg" hidden>
+
+                <label for = "card-file-input", id = "drop-zone" class = "upload-card">
+                    <h2>Upload your photo</h2>
+                    <p>Back-facing card, cropped, good lighting</p>
+                    <p>JPG OR PNG</p>
+                    <span class = "upload-button-styled">Uploaded Photo</span>
+                </label>
+            </form>
+            {% if result %}
+            <div id="results-box" class="results-container">
+                <h2>Prediction Result</h2>
+                <p class="result-text">Status: <strong>{{ result }}</strong></p>
+                <p class="confidence-text">Confidence: <strong>{{ confidence }}%</strong></p>
+                
+                <p class="results-disclaimer">
+                    *Note: Visual check only. Model cannot analyze physical card texture, weight, or light transparency.
+                </p>
+            </div>
+            {% endif %}
+
+
+        </section>
+        
+
+        <section id = "examples">
+            <h2>Examples</h2>
+
+            <div id = "exampleLayout">
+                <div class = "layoutSection">
+                    <h3>Good</h3>
+                    <img src = "../static/imgs/good_img_1.png" alt = "First Good Card Image Example">
+                    <img src = "../static/imgs/good_img_2.png" alt = "Second Good Card Image Example">
+                </div>
+                <div class = "layoutSection">
+                    <h3>Bad</h3>
+                    <img src = "../static/imgs/bad_img_2.png" alt = "First Bad Card Image Example">
+                    <img src = "../static/imgs/bad_img_2.png" alt = "Second Bad Card Image Example">
+                </div>
+            </div>
+            <div id = "tips">
+               <h3>Tips</h3>
+               <ul>
+                    <li>Crop Tight: Frame the photo so only card is visible, leave no background space or srface textures around the edges.</li>
+                    <li>Lighting: Use bright, even light to avoid heavy shadows, glare, or reflections on card surface.</li>
+                    <li>Focus and Angle: Hold the camera directly above the card so it lies flat and straight, making sure all text and borders are sharp.</li>
+                    <li>Oreintation: Use a clear, back-facing photo of the Pokémon card back to match the model's training set</li>
+               </ul> 
+            </div>
+            
+
+        </section>
+
+        <section id = "about">
+            <div class = "aboutLayout">
+                <img src = "../static/imgs/pokeCard.png" alt = "Mission Image">
+                <div class = "aboutTextLayout">
+                    <h3>The Mission</h3>
+                    <p>In second grade, I remember walking through a flea market and buying my 
+                        first ever pack of Pokémon cards. When I proudly brought them to school 
+                        the next day, my friends broke the news — they were fake. I was 
+                        devastated.
+                    </p>
+                    <p>Fake Pokémon cards have been around almost as long as the real ones, but 
+                        with the recent surge in collecting, new collectors are more vulnerable 
+                        than ever to being misled into buying counterfeits. Seeing this happen 
+                        to others, and remembering that moment back in second grade, is what 
+                        inspired me to build PokéCheck AI — a website that helps people tell 
+                        whether their Pokémon cards are real or fake.
+                    </p>
+                </div>
+            </div>
+            <div class = "aboutLayout">
+                <div class = "aboutTextLayout">
+                    <h3>How it works</h3>
+                    <p>
+                        PokéCheck AI uses a custom-trained Convolutional Neural Network (CNN) built in PyTorch to classify Pokémon trading cards as real or fake. 
+                        The system processes uploaded images through a standardized computer vision pipeline, applying normalization, resizing, and feature extraction 
+                        to analyze subtle visual patterns such as color gradients, font rendering, and border alignments. By evaluating these high-level feature maps 
+                        against patterns learned during model training, PokéCheck AI calculates a real-versus-fake probability score and returns the prediction alongside a 
+                        statistical confidence percentage in real time.
+                    </p>
+                </div>
+                
+                <img src = "../static/imgs/aiPic.png" alt = "How it works Image">
+            </div>
+            
+        </section>
+        <section id = "key-findings">
+                <div>
+                    <h3>Key Findings</h3>
+                    <ul>
+                      <li><strong>Optimization Bottleneck (SGD):</strong> Initial training using standard SGD with a high learning rate (0.1) plateaued at 71.21% validation accuracy by overshooting and predicting only the majority class. Lowering the learning rate (0.001) prevented overshooting but stalled progress entirely at 57.86% accuracy.</li><br>
+                      <li><strong>Rapid Convergence with Adam:</strong> Switching the optimizer to Adam (LR = 0.001) resolved convergence issues immediately, achieving 97.50% training accuracy and 95.93% validation accuracy in just 15 epochs.</li><br>
+                      <li><strong>Deployed Weights:</strong> Experiment 3 produced the optimal model parameters, which were exported to models/pokemon_card_model_v1.pth for live inference.</li>
+                    </ul>
+                </div>
+                
+            </section>
+            <section id = "disclaimer-note">
+                <h4>Note on Accuracy</h4>
+                <p>Predictions are based purely on 2D visual feature analysis (color, borders, and print layout). 
+                    Computer vision cannot evaluate key physical authenticity factors such as card stock texture, 
+                    holo foil depth, weight, or light transparency (the "flashlight test"). For high-value transactions, 
+                    always pair digital checks with physical inspection or professional grading.
+                </p>
+            </section>
+    </main>
+
+    <footer id = "footer">
+        <div class = "footer-section">
+            <h3>PokéCheck AI</h3>
+            <p>Computer Vision Authenticator</p>
+            <a href ="https://github.com/brifam/Pokemon-Card-Authenticator">Github Repo Link</a>
+        </div>
+        <div class = "footer-section">
+            <h3>Tech Stacks</h3>
+            <p>Powered By: PyTorch, Flask, Bootstrap</p>
+            <p>Developer: Brian Pham</p>
+            <a href ="https://www.linkedin.com/in/bphamds/">LinkedIn Profile</a>
+        </div>
+        <div id = "disclaimers">
+            <h3>Disclaimer:</h3>
+            <p>This project is an independent, non-commercial educational tool built for portfolio and machine learning demonstration purposes. It is not affiliated with, endorsed by, or sponsored by Nintendo, Game Freak, or The Pokémon Company. Predictions are generated by an AI model and should not be used for official card grading or financial valuation.</p>
+        </div>
+    </footer>
+    <script src="../static/script.js"></script>
+</body>
+</html>

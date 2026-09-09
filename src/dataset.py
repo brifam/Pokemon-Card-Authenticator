@@ -19,7 +19,7 @@ card_transform = transforms.Compose([transforms.Resize((224,224)),
 
 
 train_dataset = datasets.ImageFolder(root = "dataset/train", transform= card_transform)
-test_dataset = datasets.Imagefolder(root = "dataset/test", transform = card_transform)
+test_dataset = datasets.ImageFolder(root = "dataset/test", transform = card_transform)
 
 train_size = int(len(train_dataset) * .8)
 validation_size = len(train_dataset) - train_size
