@@ -51,3 +51,12 @@ Changinng the optimizer quickly made it sucessful without bouncing. Saved weight
 - Additionally, Flatten() to Linear Layer also might have issues in the classifier. The model was learning postion-specfic weights, so it associated certain feautes of a card to specific pixel locations rather than learning to detect those features  regardless of where they appeared. This problem is due to the fact the cropping is not exactly the same everytime the user crops and adds a card and the datasets have different croppings as well.
 
  ATTEMPT TO FIX: Adding AdaptiveAvgPool2d: takes the hidden_units * H * W and averages each channel down to a single number. Since pooling collapsed everything 1x1, only need one weight per channel.
+
+
+ ### Second errors:
+- Running train.py again, the model got stuck at 66% train accuracy and 72% validation accuracy.
+
+- The issue might be since the Adaptive2D() brought 31630 numbers down to just 10 tiny averaged values, the model doesn't have enough detail to tell between real and fake cards so it kept guessing.
+
+ATTEMPT TO FIX: Going to give the model more channels to average 
+AdaptiveAvgPool2d-> Flatten -> 32 channels -> non-linearity(ReLU) -> adding dropout to avoid overfitting -> output
