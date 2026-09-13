@@ -39,3 +39,15 @@ Experiment 3: Change optimizer to Adam, changed the epoch amount to 15, and kept
 
 Notes:
 Changinng the optimizer quickly made it sucessful without bouncing. Saved weights to `models/pokemon_card_model_v1.pth`
+
+### First Errors
+- Although model trained with good accuracy, when testing it out on the web application, it detected counterfeit cards as real with high confidence
+
+- Issue was most likely background of training dataset since on the website. The dataset had cards with gray backgrounds, so the website would prompt the user to crop the image to get rid of that issue. However the model was trained on
+  the dataset with gray backgrounds... So issues with proportion and scales will most likely occur.
+
+  ATTEMPT TO FIX: Cropped each image in the training and test datasets.
+
+- Additionally, Flatten() to Linear Layer also might have issues in the classifier. The model was learning postion-specfic weights, so it associated certain feautes of a card to specific pixel locations rather than learning to detect those features  regardless of where they appeared. This problem is due to the fact the cropping is not exactly the same everytime the user crops and adds a card and the datasets have different croppings as well.
+
+ ATTEMPT TO FIX: Adding AdaptiveAvgPool2d: takes the hidden_units * H * W and averages each channel down to a single number. Since pooling collapsed everything 1x1, only need one weight per channel.
