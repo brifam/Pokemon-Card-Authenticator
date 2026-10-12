@@ -25,8 +25,12 @@ class PokemonCardModelV1(nn.Module):
         )
 
         self.classifier = nn.Sequential(
+            nn.AdaptiveAvgPool2d(output_size=(1, 1)),
             nn.Flatten(),
-            nn.Linear(in_features= hidden_units*56*56, out_features= output_shape)
+            nn.Linear(in_features=hidden_units, out_features=32),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(in_features=32, out_features=output_shape)
         )
 
     def forward(self,x):

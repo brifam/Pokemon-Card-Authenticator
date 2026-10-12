@@ -60,3 +60,7 @@ Changinng the optimizer quickly made it sucessful without bouncing. Saved weight
 
 ATTEMPT TO FIX: Going to give the model more channels to average 
 AdaptiveAvgPool2d-> Flatten -> 32 channels -> non-linearity(ReLU) -> adding dropout to avoid overfitting -> output
+
+
+### Third errors:
+- Running train.py again, the model got stuck at around 66 training accuracy and 72 validation accuracy

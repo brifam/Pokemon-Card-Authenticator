@@ -26,7 +26,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 #input variables
 input_shape = 3
-hidden_units = 10
+hidden_units = 32
 output_shape = 1
 
 #instantiating model 0
@@ -34,11 +34,11 @@ output_shape = 1
 model_0 = PokemonCardModelV1(input_shape =input_shape, hidden_units = hidden_units,output_shape= output_shape).to(device)
 
 #Setting up loss function and optimizer
-pos_weight = torch.tensor([250/123]).to(device) 
+pos_weight = torch.tensor([123/250]).to(device) 
 loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)  
 
 #optimizer = torch.optim.SGD(model_0.parameters(), lr = .001)- with lr .01: highest val acc 93.75%  but kept randomly spiking down and up | with lr .001: kepting getting stuck in the 50-60s
-optimizer = torch.optim.Adam(params = model_0.parameters(), lr = .001)
+optimizer = torch.optim.Adam(params = model_0.parameters(), lr = 0.0003)
 
 
 #Measuring time
@@ -47,7 +47,7 @@ train_start_timer = timer()
 
 ### Training the model 0 (CNN)
 
-epochs = 15
+epochs = 40
 
 for epoch in tqdm(range(epochs)):
     print(f"--------------------------\n Epoch: {epoch}")
@@ -76,7 +76,7 @@ Model_Path = Path("models")
 
 Model_Path.mkdir(parents= True, exist_ok= True)
 
-Model_Name = "pokemon_card_model_v1.pth"
+Model_Name = "pokemon_card_model_v1_updated1.pth"
 
 Model_Save_Path = Model_Path / Model_Name
 
